@@ -1,8 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLanguage } from "@/components/language-provider";
 
 export function AboutSection() {
+  const { t } = useLanguage();
+
   return (
     <section id="about" className="relative py-32 px-6">
       <div className="max-w-6xl mx-auto">
@@ -15,11 +18,13 @@ export function AboutSection() {
             transition={{ duration: 0.6 }}
           >
             <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-4">
-              About Me
+              {t.about.label}
             </p>
             <h2 className="text-4xl md:text-5xl font-light tracking-tight leading-tight">
-              Building <br className="hidden md:block" />
-              <span className="text-muted-foreground">with Purpose</span>
+              {t.about.headingLine1} <br className="hidden md:block" />
+              <span className="text-muted-foreground">
+                {t.about.headingLine2}
+              </span>
             </h2>
           </motion.div>
 
@@ -32,25 +37,23 @@ export function AboutSection() {
             className="space-y-6"
           >
             <p className="text-muted-foreground text-lg leading-relaxed">
-              <span className="text-foreground italic">Crafting interfaces.</span>{" "}
-              Building polished software and web experiences. Experimenting with
-              magical details in user interfaces.
+              <span className="text-foreground italic">
+                {t.about.leadEmphasis}
+              </span>
+              <br />
+              {t.about.lead}
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              I specialize in creating thoughtful digital experiences that combine
-              clean aesthetics with functional design. My approach focuses on
-              attention to detail, performance optimization, and user-centered
-              solutions.
+              {t.about.paragraph2}
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              With expertise spanning frontend development, UI/UX design, and
-              creative coding, I bring ideas to life through carefully crafted
-              code and design systems.
+              {t.about.paragraph3}
             </p>
           </motion.div>
         </div>
 
-        {/* Stats */}
+        {/* Stats — 一時的に非表示（削除はしない） */}
+        {false && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -59,12 +62,7 @@ export function AboutSection() {
           className="mt-24 pt-16 border-t border-border"
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16">
-            {[
-              { value: "5+", label: "Years Experience" },
-              { value: "50+", label: "Projects Completed" },
-              { value: "30+", label: "Happy Clients" },
-              { value: "100%", label: "Dedication" },
-            ].map((stat, index) => (
+            {t.about.stats.map((stat, index) => (
               <div key={index} className="text-center md:text-left">
                 <p className="text-4xl md:text-5xl font-light tracking-tight mb-2">
                   {stat.value}
@@ -76,6 +74,7 @@ export function AboutSection() {
             ))}
           </div>
         </motion.div>
+        )}
       </div>
     </section>
   );

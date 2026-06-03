@@ -1,8 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/components/language-provider";
+import { siteConfig } from "@/lib/site-config";
 
 export function Footer() {
+  const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -16,25 +20,25 @@ export function Footer() {
           className="flex flex-col md:flex-row items-center justify-between gap-6"
         >
           {/* Logo */}
-          <a
-            href="#"
-            className="text-foreground font-mono text-sm tracking-widest uppercase hover:text-muted-foreground transition-colors"
+          <Link
+            href="/"
+            className="text-foreground font-mono text-sm tracking-widest hover:text-muted-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            Portfolio
-          </a>
+            T-base
+          </Link>
 
           {/* Copyright */}
           <p className="text-muted-foreground text-sm tracking-wide">
-            &copy; {currentYear} All rights reserved.
+            &copy; {currentYear} {siteConfig.author}. {t.footer.rights}
           </p>
 
           {/* Back to top */}
-          <a
-            href="#"
-            className="text-muted-foreground text-sm tracking-wide hover:text-foreground transition-colors"
+          <Link
+            href="/#top"
+            className="text-muted-foreground text-sm tracking-wide hover:text-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            Back to top &uarr;
-          </a>
+            {t.footer.backToTop}
+          </Link>
         </motion.div>
       </div>
     </footer>

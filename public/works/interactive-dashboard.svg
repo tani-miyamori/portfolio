@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-label="Interactive Dashboard placeholder">
+  <rect width="1280" height="800" fill="#0a0a0a"/>
+  <g fill="none" stroke="#2e2e2e" stroke-width="1">
+    <rect x="120" y="120" width="1040" height="560"/>
+    <rect x="180" y="540" width="80" height="80"/>
+    <rect x="300" y="480" width="80" height="140"/>
+    <rect x="420" y="420" width="80" height="200"/>
+    <rect x="540" y="500" width="80" height="120"/>
+  </g>
+  <text x="640" y="320" fill="#fafafa" font-family="monospace" font-size="56" font-weight="300" text-anchor="middle">Interactive Dashboard</text>
+  <text x="640" y="370" fill="#666666" font-family="monospace" font-size="22" letter-spacing="6" text-anchor="middle">PLACEHOLDER · 1280×800</text>
+</svg>

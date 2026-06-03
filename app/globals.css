@@ -35,6 +35,27 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/*
+ * prefers-reduced-motion: reduce 指定時は背景・スクロール連動などの
+ * 動きを抑制する（spec.md 7.5）。Framer Motion 側は MotionConfig
+ * reducedMotion="user" で別途抑制している。
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
 
 /* Custom geometric pattern animations */

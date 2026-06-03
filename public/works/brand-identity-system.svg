@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-label="Brand Identity System placeholder">
+  <rect width="1280" height="800" fill="#0a0a0a"/>
+  <g fill="none" stroke="#2e2e2e" stroke-width="1">
+    <rect x="120" y="120" width="1040" height="560"/>
+    <polygon points="640,300 760,520 520,520"/>
+  </g>
+  <text x="640" y="400" fill="#fafafa" font-family="monospace" font-size="56" font-weight="300" text-anchor="middle">Brand Identity System</text>
+  <text x="640" y="450" fill="#666666" font-family="monospace" font-size="22" letter-spacing="6" text-anchor="middle">PLACEHOLDER · 1280×800</text>
+</svg>

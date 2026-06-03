@@ -4,55 +4,50 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this project is
 
-A static, no-build portfolio site for showcasing web production work (LP, HP, EC). Two pages share one CSS/JS pair:
+A portfolio site built with Next.js 15 (App Router) + React 19 + TypeScript + Tailwind CSS. Dark-only theme. Two routes (`/` and `/works`). No backend, no database — project data is hardcoded in `lib/i18n.ts`. Bilingual (ja default / en). The full design spec is in [spec.md](spec.md).
 
-- `index.html` — public view, renders work cards from `localStorage`
-- `admin.html` — password-protected CRUD dashboard for managing works
+## Commands
 
-No npm, no bundler. Serve with `npx serve .` (port 3000) or any static file server.
-
-## Data model
-
-All data lives in browser storage. Three keys:
-
-| Key | Storage | Contents |
-|-----|---------|----------|
-| `portfolio_works_v1` | localStorage | JSON array of work objects |
-| `portfolio_admin_hash` | localStorage | SHA-256 hash of admin password |
-| `portfolio_admin_session` | sessionStorage | `"true"` when logged in |
-
-Work object shape:
-```js
-{ id: Date.now(), url, title, comment, price, period, scope, ingenuity, addedAt }
+```bash
+pnpm dev       # start dev server with Turbopack (localhost:3000)
+pnpm build     # production build
+pnpm lint      # ESLint via next lint
 ```
 
 ## Architecture
 
-**`js/main.js`** — reads works from localStorage, renders `.card` elements into `#portfolioGrid`, shows `#emptyState` when empty.
+`app/page.tsx` composes section components in order: `GeometricBackground → Header → HeroSection → WorksSection → AboutSection → SkillsSection → ContactSection → Footer`. `app/works/page.tsx` is the full project listing (uses [components/works-gallery.tsx](components/works-gallery.tsx)).
 
-**`js/admin.js`** — three screens (`setupScreen` / `loginScreen` / `adminDashboard`) toggled by `showScreen()`. Auth uses `crypto.subtle` SHA-256. CRUD operations call `saveWorks()` then `renderWorks()`.
+Metadata and dynamic asset routes live alongside pages: `app/icon.tsx` / `app/apple-icon.tsx` / `app/opengraph-image.tsx` are next/font-style image route handlers, and `app/not-found.tsx` is the 404 page.
 
-**Thumbnail generation** — card/admin-row images are fetched from `https://image.thum.io/get/width/{w}/crop/{h}/{url}`. Falls back to `assets/placeholder.svg` on error.
+All page sections live in [components/](components/) as named exports.
+
+### Project data
+
+Project meta (language-independent) is the `projects` array in [lib/i18n.ts](lib/i18n.ts): `id`, `category` (union type), `year`, `screenshot`, `url` (`string | null`), `featured`. Per-language title/description live in `translations[lang].works.projectsText` keyed by `id`. **To add a project: append one entry to `projects` and add the matching `id` text to both `ja` and `en`.** Screenshots go in `public/works/<id>.*` (16:10, WebP 1280px target; SVG placeholders ship today and `next.config.mjs` enables `dangerouslyAllowSVG`). `featuredProjects` (filtered by `featured`) drives the top WorksSection; `/works` shows all.
+
+[components/project-card.tsx](components/project-card.tsx) (clickable card) + [components/project-modal.tsx](components/project-modal.tsx) (detail modal: focus trap, Esc/backdrop close, scroll lock, focus restore) are shared by WorksSection and the `/works` gallery.
+
+### i18n
+
+[lib/i18n.ts](lib/i18n.ts) holds all strings; [components/language-provider.tsx](components/language-provider.tsx) supplies `language` / `setLanguage` / `t` via context. Language is persisted in the `portfolio-language` cookie and read server-side in [app/layout.tsx](app/layout.tsx) so SSR renders the right language (no flicker). [components/providers.tsx](components/providers.tsx) wraps the tree with `MotionConfig reducedMotion="user"` + `LanguageProvider`.
+
+### Owner-supplied / dummy values
+
+Centralized in [lib/site-config.ts](lib/site-config.ts) (email, social URLs, Formspree endpoint via `NEXT_PUBLIC_FORMSPREE_ENDPOINT`; see [.env.example](.env.example)). See spec.md §7.3 for the pre-launch replacement checklist.
+
+`lib/utils.ts` exports `cn()` (clsx + tailwind-merge) for conditional class merging. `lib/image.ts` exports `BLUR_DATA_URL`, a shared 1×1 dark PNG used as `next/image` `placeholder="blur"` backing across all screenshots to suppress layout shift.
 
 ## CSS system
 
-All values must come from `css/variables.css` — no hardcoded colors, spacing, or sizes anywhere in `style.css`. Key token groups:
+Design tokens are HSL CSS variables defined in [`app/globals.css`](app/globals.css) and consumed via Tailwind semantic aliases (`bg-background`, `text-foreground`, `text-muted-foreground`, `border-border`, `bg-secondary`, etc.) configured in [`tailwind.config.ts`](tailwind.config.ts).
 
-- Colors: `--color-primary`, `--color-primary-dark`, `--color-accent`, `--color-surface`, `--color-text-muted`, etc.
-- Spacing: `--sp-1` through `--sp-16` (0.25 rem increments)
-- Font sizes: `--fs-xs` through `--fs-3xl`
-- Radius: `--r-sm` / `--r-md` / `--r-lg` / `--r-xl` / `--r-full`
-- Transitions: `--t-fast` (150ms) / `--t-base` (250ms)
+Always use Tailwind utility classes. Never hardcode color or spacing values. Use `cn()` for conditional classes.
 
-Responsive: mobile-first with `min-width` breakpoints. Grid collapses 3→2→1 columns.
+## Animations
 
-## XSS safety
+Scroll-triggered animations use Framer Motion's `whileInView` with `viewport={{ once: true }}` throughout. New animated elements should follow the same `initial → whileInView` pattern with staggered `delay` for lists. `prefers-reduced-motion: reduce` is honored globally: CSS animations are neutralized in [app/globals.css](app/globals.css) and Framer Motion via `MotionConfig reducedMotion="user"`.
 
-Every piece of user-supplied content rendered into HTML **must** go through `esc()`. Both `main.js` and `admin.js` define their own copy. Do not bypass or forget it when adding new fields.
+## Fonts
 
-## Rules
-
-- CSS variables only — no direct color/spacing values in `style.css`
-- Images in `assets/images/`, always with `alt` attribute
-- Responsive: mobile-first (`min-width` media queries), test at 375 px and 1280 px
-- All user content through `esc()` before inserting into innerHTML
+Geist Sans (`--font-geist-sans`) and Geist Mono (`--font-geist-mono`) are loaded via `next/font/google` in `app/layout.tsx` and exposed as CSS variables.

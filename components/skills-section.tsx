@@ -1,23 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-const skills = [
-  {
-    category: "Development",
-    items: ["React / Next.js", "TypeScript", "Node.js", "Python"],
-  },
-  {
-    category: "Design",
-    items: ["Figma", "UI/UX Design", "Design Systems", "Prototyping"],
-  },
-  {
-    category: "Tools",
-    items: ["Git / GitHub", "Vercel", "Docker", "AWS"],
-  },
-];
+import { useLanguage } from "@/components/language-provider";
 
 export function SkillsSection() {
+  const { t } = useLanguage();
+  const skills = t.skills.groups;
+
   return (
     <section id="skills" className="relative py-32 px-6 bg-card/30">
       <div className="max-w-6xl mx-auto">
@@ -30,10 +19,10 @@ export function SkillsSection() {
           className="mb-20 text-center"
         >
           <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-4">
-            Expertise
+            {t.skills.label}
           </p>
           <h2 className="text-4xl md:text-5xl font-light tracking-tight">
-            Skills & Tools
+            {t.skills.title}
           </h2>
         </motion.div>
 
