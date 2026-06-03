@@ -1,31 +1,33 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Noto_Serif_JP, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const notoSerifJP = Noto_Serif_JP({
+  variable: "--font-noto-serif-jp",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio | Creative Developer",
-  description: "Crafting digital experiences with precision and creativity. Explore my work in web development, design, and interactive experiences.",
-  keywords: ["portfolio", "developer", "web design", "creative", "frontend"],
-  authors: [{ name: "Developer" }],
+  title: "歴史館 | 美は、時間を超える。",
+  description: "千年の時を超えて受け継がれる美の本質。日本の歴史と文化の深淵を探求する、唯一無二のミュージアム体験。",
+  keywords: ["歴史館", "美術館", "日本文化", "歴史", "伝統"],
+  authors: [{ name: "歴史館" }],
   openGraph: {
-    title: "Portfolio | Creative Developer",
-    description: "Crafting digital experiences with precision and creativity.",
+    title: "歴史館 | 美は、時間を超える。",
+    description: "千年の時を超えて受け継がれる美の本質を探求する。",
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#080808",
+  themeColor: "#f5f3ef",
   width: "device-width",
   initialScale: 1,
 };
@@ -38,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="ja" className="bg-background">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${notoSerifJP.variable} ${cormorant.variable} font-serif antialiased`}
       >
         {children}
       </body>

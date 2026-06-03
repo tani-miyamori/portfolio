@@ -1,78 +1,80 @@
 "use client";
 
 import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { label: "Works", href: "#works" },
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
+  { label: "館について", href: "#about" },
+  { label: "展示", href: "#exhibitions" },
+  { label: "所蔵品", href: "#collection" },
+  { label: "ご来館", href: "#visit" },
 ];
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
-      <nav className="mx-auto max-w-7xl px-6 py-6">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <a
-            href="#"
-            className="text-foreground font-mono text-sm tracking-widest uppercase hover:text-muted-foreground transition-colors"
-          >
-            Portfolio
-          </a>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
+      <div className="flex items-center justify-between px-6 md:px-12 lg:px-24 py-6">
+        {/* Logo */}
+        <a href="/" className="flex items-center gap-3">
+          <div className="w-8 h-8 border border-foreground flex items-center justify-center">
+            <span className="text-xs font-light">歴</span>
+          </div>
+          <span className="text-sm tracking-[0.2em] hidden md:block">歴史館</span>
+        </a>
 
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                <a
-                  href={item.href}
-                  className="text-muted-foreground text-sm tracking-wide hover:text-foreground transition-colors relative group"
-                >
-                  {item.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
-                </a>
-              </li>
-            ))}
-          </ul>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-12">
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className="text-sm tracking-wider text-muted-foreground hover:text-foreground transition-colors duration-300"
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-foreground p-2"
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div
-          className={cn(
-            "md:hidden overflow-hidden transition-all duration-300",
-            isMenuOpen ? "max-h-64 mt-6" : "max-h-0"
-          )}
+        {/* Menu Button */}
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="flex flex-col gap-1.5 p-2 md:hidden"
+          aria-label="メニューを開く"
         >
-          <ul className="flex flex-col gap-4 border-t border-border pt-6">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                <a
-                  href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="text-muted-foreground text-sm tracking-wide hover:text-foreground transition-colors block py-2"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <span className={`w-6 h-px bg-foreground transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`w-6 h-px bg-foreground transition-all duration-300 ${isMenuOpen ? "opacity-0" : ""}`} />
+          <span className={`w-6 h-px bg-foreground transition-all duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+        </button>
+
+        {/* Language */}
+        <div className="hidden md:flex items-center gap-4 text-sm">
+          <span className="text-foreground">JP</span>
+          <span className="text-muted-foreground">/</span>
+          <span className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer">EN</span>
         </div>
-      </nav>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`md:hidden bg-background border-t border-border overflow-hidden transition-all duration-500 ${isMenuOpen ? "max-h-96" : "max-h-0"}`}>
+        <nav className="flex flex-col px-6 py-8 gap-6">
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              onClick={() => setIsMenuOpen(false)}
+              className="text-lg tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {item.label}
+            </a>
+          ))}
+          <div className="flex items-center gap-4 text-sm pt-4 border-t border-border">
+            <span className="text-foreground">JP</span>
+            <span className="text-muted-foreground">/</span>
+            <span className="text-muted-foreground">EN</span>
+          </div>
+        </nav>
+      </div>
     </header>
   );
 }
